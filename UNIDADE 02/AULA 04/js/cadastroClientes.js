@@ -14,14 +14,39 @@
 */
 
 //Escopo Global
+const botãoSalvar = document.getElementById("salvar");
+const caixaNome = document.getElementById("nome");
 
+//Função para retirar e validar os dados do formulário
 const getDados = function() {
-    let nome = document.getElementById("nome").value;
-    let email = document.getElementById("email").value;
+    let nome = document.getElementById("nome");
+    let email = document.getElementById("email");
 
-    console.log("Nome: " + nome);
-    console.log("Email: " + email);
+    // Resetar o background dos campos
+    nome.style.backgroundColor = "#fff";
+    email.style.backgroundColor = "#fff";
+
+    // Validação de Dados
+    if(nome.value == '') {
+        alert("O campo nome é obrigatório!");
+        nome.style.backgroundColor = "#ed766d";
+    } else if (email.value == '') {
+        alert("O campo email é obrigatório!");
+        email.style.backgroundColor = "#ed766d";
+    };
 }
 
-const botãoSalvar = document.getElementById("salvar");
+// Função para impedir digitação de números no campo.
+const blockNumber = function(tecla) {
+    if(tecla.charCode >= 48 && tecla.charCode <=57) {
+        return false
+    }
+}
+
+//Função de evento para o clique do botão
 botãoSalvar.addEventListener("click", getDados);
+caixaNome.addEventListener("keypress", function(event){
+    if(blockNumber(event) == false) {
+        event.preventDefault();
+    };
+});

@@ -14,7 +14,8 @@
 */
 
 //Escopo Global
-const botãoSalvar = document.getElementById("salvar");
+const botaoSalvar = document.getElementById("salvar");
+const botaoLimpar = document.getElementById("limpar");
 const nome = document.getElementById("nome");
 const email = document.getElementById("email");
 
@@ -64,12 +65,40 @@ const blockNumber = function(tecla) {
     }
 }
 
+//Função de limpar dados
+const resetDados = function() {
+    //Limpar dados do form
+    nome.value = ''
+    email.value = ''
+
+    //Limpar dados da lista de clientes
+    let contador = 1
+    while(contador <= 4) {
+        let colunaNome = document.getElementById("nome" + contador)
+        let colunaEmail = document.getElementById("email"+ contador)
+
+        colunaNome.innerText = ""
+        colunaEmail.innerText = ""
+
+        contador += 1
+    }
+
+    contadorRegistros = 1
+}
+
 //Função de evento para o clique do botão
-botãoSalvar.addEventListener("click", function() {
+botaoSalvar.addEventListener("click", function() {
     if (getDados()){
         setDadosList()
     }
 });
+
+botaoLimpar.addEventListener("click", function() {
+    let result = confirm("DEseja realmente limpar os dados do cadastro?? (formulário e Lista de clientes)")
+    if(result) {
+        resetDados();
+    }
+})
 
 nome.addEventListener("keypress", function(event){
     if(blockNumber(event) == false) {

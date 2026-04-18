@@ -15,12 +15,14 @@
 
 //Escopo Global
 const botãoSalvar = document.getElementById("salvar");
-const caixaNome = document.getElementById("nome");
+const nome = document.getElementById("nome");
+const email = document.getElementById("email");
+
+var contadorRegistros = 1
 
 //Função para retirar e validar os dados do formulário
 const getDados = function() {
-    let nome = document.getElementById("nome");
-    let email = document.getElementById("email");
+    let status = true;
 
     // Resetar o background dos campos
     nome.style.backgroundColor = "#fff";
@@ -30,10 +32,29 @@ const getDados = function() {
     if(nome.value == '') {
         alert("O campo nome é obrigatório!");
         nome.style.backgroundColor = "#ed766d";
+        status = false;
     } else if (email.value == '') {
         alert("O campo email é obrigatório!");
         email.style.backgroundColor = "#ed766d";
+        status = false;
     };
+
+    return status;
+}
+
+// Função para inserir novos dados na lista de clientes
+const setDadosList = function(){
+    if (contadorRegistros <= 4) {
+        let colunaNome = document.getElementById("nome" + contadorRegistros);
+        let colunaEmail = document.getElementById("email" + contadorRegistros);
+
+        colunaNome.innerText = nome.value
+        colunaEmail.innerText = email.value
+        
+        contadorRegistros += 1
+    } else {
+        alert("Não é possível inserir novos clientes!")
+    }
 }
 
 // Função para impedir digitação de números no campo.
@@ -44,8 +65,13 @@ const blockNumber = function(tecla) {
 }
 
 //Função de evento para o clique do botão
-botãoSalvar.addEventListener("click", getDados);
-caixaNome.addEventListener("keypress", function(event){
+botãoSalvar.addEventListener("click", function() {
+    if (getDados()){
+        setDadosList()
+    }
+});
+
+nome.addEventListener("keypress", function(event){
     if(blockNumber(event) == false) {
         event.preventDefault();
     };

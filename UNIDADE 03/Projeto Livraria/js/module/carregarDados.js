@@ -8,4 +8,23 @@
 
 import { livros } from "./livros.js";
 
-console.log(livros);
+// console.log(livros[0].books[2].title);
+
+const setCreateCard = function (bibliotecaLivros) {
+    let divCardProdutos = document.getElementById('cardProdutos');
+
+    // Cria elementos no HTML
+    let divCaixa_produto = document.createElement('div');
+
+    // Adiciona um atributo para a div criada
+    divCaixa_produto.setAttribute('class', 'caixa_produto');
+    
+    // Diz que um elemento é filho de outro elemento
+    divCardProdutos.appendChild(divCaixa_produto);
+
+    
+}
+
+window.addEventListener('load', function() {
+    setCreateCard(livros)
+});

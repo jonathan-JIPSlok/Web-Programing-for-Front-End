@@ -12,17 +12,44 @@ import { livros } from "./livros.js";
 
 const setCreateCard = function (bibliotecaLivros) {
     let divCardProdutos = document.getElementById('cardProdutos');
-
-    // Cria elementos no HTML
-    let divCaixa_produto = document.createElement('div');
-
-    // Adiciona um atributo para a div criada
-    divCaixa_produto.setAttribute('class', 'caixa_produto');
     
-    // Diz que um elemento é filho de outro elemento
-    divCardProdutos.appendChild(divCaixa_produto);
+    bibliotecaLivros[0].books.forEach(function(itemLivro) {
 
-    
+        console.log(itemLivro);
+
+        // Cria elementos no HTML
+        let divCaixa_produto = document.createElement('div');
+        let h2Caixa_titulo = document.createElement('h2');
+        let figureCaixa_imagem = document.createElement('figure');
+        let imgProduto = document.createElement('img');
+        let divCaixa_texto = document.createElement('div');
+        let pTextoProduto = document.createElement('p');
+        let divComprar = document.createElement('div');
+
+        // Adiciona um atributo para a div criada
+        divCaixa_produto.setAttribute('class', 'caixa_produto');
+        h2Caixa_titulo.setAttribute('class', 'caixa_titulo');
+        figureCaixa_imagem.setAttribute('class', 'caixa_imagem');
+        imgProduto.setAttribute('src', itemLivro.image);
+        imgProduto.setAttribute('alt', 'Imagem de Livro');
+        imgProduto.setAttribute('title', 'Livro de TI');
+        divCaixa_texto.setAttribute('class', 'caixa_texto');
+        divComprar.setAttribute('class', 'comprar');
+
+        //Texto do título do produto
+        h2Caixa_titulo.innerText = itemLivro.title;
+        pTextoProduto.innerText = itemLivro.subtitle;
+        divComprar.innerText = 'Comprar';
+
+        // Diz que um elemento é filho de outro elemento
+        divCardProdutos.appendChild(divCaixa_produto);
+        divCaixa_produto.appendChild(h2Caixa_titulo);
+        divCaixa_produto.appendChild(figureCaixa_imagem);
+        figureCaixa_imagem.appendChild(imgProduto);
+        divCaixa_produto.appendChild(divCaixa_texto);
+        divCaixa_texto.appendChild(pTextoProduto);
+        divCaixa_produto.appendChild(divComprar);
+    });
 }
 
 window.addEventListener('load', function() {

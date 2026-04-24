@@ -12,8 +12,8 @@ import { livros } from "./livros.js";
 
 const setCreateCard = function (bibliotecaLivros) {
     let divCardProdutos = document.getElementById('cardProdutos');
-    
-    bibliotecaLivros[0].books.forEach(function(itemLivro) {
+
+    bibliotecaLivros.books.forEach(function(itemLivro) {
 
         console.log(itemLivro);
 
@@ -52,6 +52,18 @@ const setCreateCard = function (bibliotecaLivros) {
     });
 }
 
+const getDadosLivrosAPI = async function() {
+    let url = 'https://app-livraria-2024-gsc9e3gcdsh2f2b5.brazilsouth-01.azurewebsites.net/v2/livraria/livros';
+
+    let response = await fetch(url)
+    console.log("resposta" + response);
+
+    let dados = await response.json();
+
+    setCreateCard(dados);
+};
+
 window.addEventListener('load', function() {
-    setCreateCard(livros)
+    //setCreateCard(livros)
+    getDadosLivrosAPI();
 });

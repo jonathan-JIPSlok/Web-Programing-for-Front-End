@@ -47,6 +47,7 @@ const postLivro = async function() {
     if(response.status == 201) {
         alert('Livro cadastrado com sucesso!');
         resetForm();
+        document.getElementById('salvar').innerText = 'Salvar';
         getAllLivros();
         
     }else{
@@ -59,11 +60,64 @@ const postLivro = async function() {
 //Atualizar um livro existente
 const putLivro = async function() {
 
+    let id = sessionStorage.getItem('idLivro');
+
+    let URL = 'https://app-livraria-2024-gsc9e3gcdsh2f2b5.brazilsouth-01.azurewebsites.net/v2/livraria/atualizar/livro/';
+
+    let dadosJSON = {};
+
+    //Receber os dados do formulário
+    let nomeLivro       = document.getElementById('title');
+    let descricaoLivro  = document.getElementById('subtitle');
+    let fotoLivro       = document.getElementById('image');
+    let valorLivro      = document.getElementById('price');
+
+    //Validação
+
+
+
+    //Crira o JSON de dados
+    dadosJSON.title     = nomeLivro.value;
+    dadosJSON.subtitle  = descricaoLivro.value;
+    dadosJSON.image     = fotoLivro.value;
+    dadosJSON.price     = valorLivro.value;
+
+    console.log(dadosJSON);
+    //POST dos dados para a API de Livros
+    let response = await fetch(URL, {
+        method: 'PUT',
+        mode: 'cors',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(dadosJSON)
+    })
+
+    if(response.status == 200) {
+        alert('Livro atualizado com sucesso!');
+        resetForm();
+        getAllLivros();
+    }else{
+        alert('Não foi possível atualizar o livro. Houve problemas na requisição.');
+    }
+
 }
 
 
 //excluir um livro existente
-const deleteLivro = async function() {
+const deleteLivro = async function(id) {
+    let URL = 'https://app-livraria-2024-gsc9e3gcdsh2f2b5.brazilsouth-01.azurewebsites.net/v2/livraria/excluir/livro' + id;
+
+    let response = await fetch(URL, {
+        method: 'DELETE'
+    })
+
+    if (response.status == 200) {
+        alert('Livro excluído com sucesso!');
+        getAllLivros();
+    }else{
+        alert('Não foi possível excluir o livro. Houve problemas na requisição.');
+    }
 
 }
 
@@ -108,7 +162,9 @@ const getAllLivros = async function() {
         //Adicionar atributos
         divDados.setAttribute('class', 'linha dados');
         imgEditar.setAttribute('src', "icones/ditar.png");
+        imgEditar.setAttribute('idLivro', idLivro);
         imgExcluir.setAttribute('src', "icones/excluir.png");
+        imgExcluir.setAttribute('idLivro', idLivro);
 
         //Textos
         divTitle.innerText = nomeLivros;
@@ -125,14 +181,40 @@ const getAllLivros = async function() {
         divOpcoes.appendChild(spanExcluir);
         spanEditar.appendChild(imgEditar);
         spanExcluir.appendChild(imgExcluir);
+
+        //Função para excluir um livro
+        imgExcluir.addEventListener('click', function() {
+            deleteLivro(imgExcluir.getAttribute('idLivro'));
+        });
+
+        //Função para buscar um livro pelo id
+        imgEditar.addEventListener('click', function() {
+            getByIdLivro(imgEditar.getAttribute('idLivro'));
+        });
     });
 
 }
 
 
 //buscar um livro pelo id
-const getByIdLivro = async function() {
+const getByIdLivro = async function(id) {
 
+    //Guarda o id do livro selecionado para edição em uma variável de sessão
+    sessionStorage.setItem('idLivro', id);
+
+    let URL = 'https://app-livraria-2024-gsc9e3gcdsh2f2b5.brazilsouth-01.azurewebsites.net/v2/livraria/livro/' + id;
+    
+    let response = await fetch(URL)
+
+    let dados = await response.json();
+
+    //Recebe os dados do livro encontrado
+    document.getElementById('title').value = dados.books[0].title;
+    document.getElementById('subtitle').value = dados.books[0].subtitle;
+    document.getElementById('image').value = dados.books[0].image;
+    document.getElementById('price').value = dados.books[0].price;
+
+    document.getElementById('salvar').innerText = 'Atualizar';
 }
 
 
@@ -146,7 +228,11 @@ const resetForm = function() {
 
 
 botaoSalvar.addEventListener('click', function() {
-    postLivro();
+    if(botaoSalvar.innerText == 'Salvar') {
+        postLivro();
+    }else if(botaoSalvar.innerText == 'Atualizar') {
+        putLivro();
+    }
 });
 
 
